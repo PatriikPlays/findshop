@@ -90,3 +90,17 @@ export function sliceArgs(str: string): string[] {
 
     return args;
 }
+
+export function padDecimals(num: number, decimals: number): string {
+    // there has to be a better way to do this
+    var numStr = num.toString();
+    var split = numStr.split(".")
+    
+    if (split.length == 1) {
+        numStr += "." + ("0").repeat(decimals)
+    } else if (decimals-split[1].length > 0) {
+        numStr += ("0").repeat(decimals-split[1].length)
+    }
+
+    return numStr;
+}

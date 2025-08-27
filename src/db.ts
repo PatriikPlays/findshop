@@ -273,20 +273,20 @@ export class DatabaseManager {
                 friendlyName: "Total shops",
                 value: await this.prisma.shop.count(),
             },
-            itemCount: {
-                codeName: "total_items",
-                friendlyName: "Total items",
-                value: await this.prisma.item.count(),
-            },
             locationCount: {
                 codeName: "total_locations",
                 friendlyName: "Total locations",
                 value: await this.prisma.location.count(),
             },
+            itemCount: {
+                codeName: "total_items",
+                friendlyName: "Total items",
+                value: await this.prisma.item.count(),
+            },
             lastInfoUpdate: {
-                codeName: "last_findshop_packet",
-                friendlyName: "Last findshop packet",
-                value: lastPacket?.lastSeen || null,
+                codeName: "last_shopsync_update",
+                friendlyName: "Last ShopSync update",
+                value: lastPacket?.lastSeen?.toISOString() || null,
             },
         };
     }

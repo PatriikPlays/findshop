@@ -25,10 +25,10 @@
     "@prisma/client": "5.17.0",
     "switchchat": "^3.3.1",
     "tslog": "^4.9.3",
-    "zod": "^3.23.8"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.6",
+    "@types/bun": "^1.2.21",
     "prisma": "5.17.0"
   },
   "peerDependencies": {
