@@ -1,6 +1,3 @@
-> [!IMPORTANT]
-> With the shutdown of SwitchCraft3, FindShop has been archived.
-
 <h1 align="center"> FindShop </h1>
 <p align="center">Powerful SwitchCraft service to <strong>find shops and items!</strong></p>
 
