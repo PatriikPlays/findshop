@@ -11,9 +11,13 @@
 <hr>
 
 FindShop is a SwitchCraft service providing an easy way to search for compatible
-shops implementing the [ShopSync] protocol. Valid command aliases are `\fs` or `\findshop`.
+shops implementing the [ShopSync] protocol. Default command aliases are `\fs` or `\findshop`.
 
 ## FAQ
+
+### Supported servers
+
+Currently, findshop only runs on [ReconnectedCC](https://reconnected.cc/). The aliases being used are `\fsl` and `\findshoplegacy`, and the HTTP API runs at https://rcc.findshop.patriik.one/api/.
 
 ### Why are shops or items missing?
 
@@ -42,6 +46,7 @@ shops implementing the [ShopSync] standard. Shops might not appear if:
 - their software implemented ShopSync incorrectly
 - their shop hasn't been configured to use ShopSync
 - their shop hasn't been loaded recently
+- something is broken on our end
 
 ### What softwares support ShopSync?
 
@@ -98,6 +103,27 @@ Returns some statistics.
 ```
 
 Lists all available shops.
+
+## HTTP API
+
+### `/v1/`
+> `/v1/items`
+> ```
+> Query params (optional):
+>
+> query: string query
+> exact: true/false
+> inStock: true/false
+> sell: true/false
+> includeFullShop: true/false
+> ```
+
+> `/v1/shop/:id`
+> ```
+> Query params (optional):
+>
+> includeItems: true/false
+> ```
 
 ## Deployment
 
