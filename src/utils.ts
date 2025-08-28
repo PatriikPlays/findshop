@@ -85,7 +85,13 @@ export function sliceArgs(str: string): string[] {
     let match;
 
     while ((match = regex.exec(str)) !== null) {
-        args.push(match[1] || match[2] || match[0]);
+        if (match[1] !== undefined) {
+            args.push(match[1]);
+        } else if (match[2] !== undefined) {
+            args.push(match[2]);
+        } else {
+            args.push(match[0]);
+        }
     }
 
     return args;
@@ -96,7 +102,7 @@ export function padDecimals(num: number, decimals: number): string {
     var numStr = num.toString();
     var split = numStr.split(".")
     
-    if (split.length == 1) {
+    if (split.length < 2) {
         numStr += "." + ("0").repeat(decimals)
     } else if (decimals-split[1].length > 0) {
         numStr += ("0").repeat(decimals-split[1].length)

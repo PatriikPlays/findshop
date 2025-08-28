@@ -63,30 +63,28 @@ shops implementing the [ShopSync] standard. Shops might not appear if:
 ### Buy
 
 ```chat
-\fs buy <item>
+\fs buy [[=]item] [page]
 ```
 
-Finds shops with `<item>` and returns the shop name, location, item price &
+Finds shops with `[item]` and returns the shop name, location, item price &
 quantity in stock. The buy keyword is optional: if no subcommand is specified,
-buy is inferred.
+buy is inferred. If `[item]` is prefixed with `=`, an exact query is performed.
 
 ### Sell
 
 ```chat
-\fs sell <item>
+\fs sell [[=]item] [page]
 ```
 
-Finds shops buying `<item>` and returns the shop name, location and item price.
+Finds shops buying `[item]` and returns the shop name, location and item price. If `[item]` is prefixed with `=`, an exact query is performed.
 
 ### Shop Details
 
 ```chat
-\fs shop <name> [page]
+\fs shop <id> [page]
 ```
 
-Finds shops with `<name>` and returns the owner, location, and other statistics.
-If multiple results are found, a list of results with page numbers will be
-shown.
+Finds shops with `<id>` and returns the owner, location, and other statistics.
 
 ### Stats
 

@@ -116,11 +116,11 @@ export class ChatboxHandler {
         await this.chatbox.tell(
             user,
             `FindShop helps locate ShopSync-compatible shops buying or selling an item.
-      \`\\${cmd} list\` - List detected shops
-      \`\\${cmd} stats\` - Statistics - currently only basic
-      \`\\${cmd} buy [item]\` - Finds shops selling *[item]*
-      \`\\${cmd} sell [item]\` - Finds shops buying *[item]*
-      \`\\${cmd} shop [id]\` - Finds shop based on computer *[id]* and their info
+    \`\\${cmd} list\` - List detected shops
+    \`\\${cmd} stats\` - Statistics - currently only basic
+    \`\\${cmd} buy [[=]item]\` - Finds shops selling *[item]* [=] - exact
+    \`\\${cmd} sell [[=]item]\` - Finds shops buying *[item]* [=] - exact
+    \`\\${cmd} shop [id]\` - Finds shop based on computer *[id]* and their info
       For more information, check [the GitHub repository](${this.config.GITHUB_LINK})`
         );
     }
@@ -138,8 +138,12 @@ export class ChatboxHandler {
         shopBuysItemOnly: boolean;
         cmd: string;
     }) {
-        if (!searchQuery)
-            return this.chatbox.tell(user, "&c&lError: &cMissing query");
+        if (!searchQuery) {
+            //return this.chatbox.tell(user, "Error: Missing query");
+            searchQuery = ""
+        }
+
+        console.log(searchQuery)
 
         const exact = searchQuery.charAt(0) === "=";
         if (exact) searchQuery = searchQuery.substring(1);
