@@ -143,8 +143,6 @@ export class ChatboxHandler {
             searchQuery = ""
         }
 
-        console.log(searchQuery)
-
         const exact = searchQuery.charAt(0) === "=";
         if (exact) searchQuery = searchQuery.substring(1);
 
@@ -178,9 +176,14 @@ export class ChatboxHandler {
                 
                 const priceStr = `${padDecimals(price, 2)}${currency}`
 
+                if (!item.stock) {
+                    
+                    item.stock = 0;
+                }
+
                 output.push({
                     price: price,
-                    stock: item.stock,
+                    stock: item.stock ?? (item.madeOnDemand ? 2^31-1 : 0),
                     text: `${priceStr} (${item.stock ?? "-"}) \`${item.name}\` at **${item.shop.name}** (id=\`${item.shop.computerID}${item.shop.multiShop ? ";":""}${item.shop.multiShop ?? ""}\`) (${formatLocation(
                         mainLocation
                     )})`

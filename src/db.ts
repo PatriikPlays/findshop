@@ -13,7 +13,7 @@ export interface Statistics {
     shopCount: Statistic<number>;
     itemCount: Statistic<number>;
     locationCount: Statistic<number>;
-    lastInfoUpdate: Statistic<Date | null>;
+    lastInfoUpdate: Statistic<string | null>;
 }
 
 type SearchItemsReturnType<T extends boolean> = T extends true
