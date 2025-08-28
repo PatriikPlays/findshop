@@ -125,13 +125,13 @@ Lists all available shops.
 
 ## Deployment
 
-You must use a reverse-proxy like [NginX](https://nginx.org/) or
-[Casket](https://docs.casketserver.com/) to rate-limit, log and protect the API.
-The IP of the user must be set to the `X-Forwarded-For` header. The proxy must
+You must use a reverse-proxy like [Nginx](https://nginx.org/) or
+[Caddy](https://caddyserver.com/) to rate-limit, log, and protect the API.
+The IP of the client must be set in the `X-Forwarded-For` header. The proxy must
 not accept any pre-existing value in the header, and should always overwrite it.
 
 ## Contributing
 
-FindShop is developed using the [Bun toolkit and runtime](https://bun.sh).
+FindShop is developed using the [Bun toolkit and runtime](https://bun.com).
 
 [ShopSync]: https://p.sc3.io/7Ae4KxgzAM
