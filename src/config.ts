@@ -22,6 +22,7 @@ export const configSchema = z.object({
     RESULTS_PER_PAGE: z.number().default(7),
     GITHUB_LINK: z.string().default("https://github.com/PatriikPlays/findshop"),
     CHAT_WIDTH: z.number().default(49),
+    SHOP_EXPIRE_DAYS: z.number().positive().default(14), 
 });
 
 export async function parseConfig() {

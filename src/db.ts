@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { FindShopLogger } from "./logger";
 import { websocketMessageSchema } from "./schemas";
+import { configSchema } from "./config";
 
 interface Statistic<T> {
     codeName: string;
@@ -35,9 +36,11 @@ type SearchItemsReturnType<T extends boolean> = T extends true
 
 export class DatabaseManager {
     prisma: PrismaClient;
+    config: z.infer<typeof configSchema>;
 
-    constructor(prisma: PrismaClient) {
+    constructor(prisma: PrismaClient, config: z.infer<typeof configSchema>) {
         this.prisma = prisma;
+        this.config = config;
 
         setInterval(async () => {
             await this.cleanOldShops();
@@ -48,7 +51,7 @@ export class DatabaseManager {
         const deleted = await this.prisma.shop.deleteMany({
             where: {
                 lastSeen: {
-                    lt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+                    lt: new Date(Date.now() - this.config.SHOP_EXPIRE_DAYS * 24 * 60 * 60 * 1000),
                 },
             },
         });
@@ -292,7 +295,7 @@ export class DatabaseManager {
     }
 }
 
-export async function connectToDatabase() {
+export async function connectToDatabase(config: z.infer<typeof configSchema>) {
     FindShopLogger.logger.debug("Connecting to database...");
     const prisma = new PrismaClient({
         log: ["error", "info", "warn"],
@@ -300,5 +303,5 @@ export async function connectToDatabase() {
 
     await prisma.$connect();
     FindShopLogger.logger.debug("Connected to database!");
-    return new DatabaseManager(prisma);
+    return new DatabaseManager(prisma, config);
 }

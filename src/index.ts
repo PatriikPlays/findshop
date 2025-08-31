@@ -6,7 +6,7 @@ import { websocketMessageSchema } from "./schemas";
 
 FindShopLogger.logger.info("Starting FindShop backend...");
 const config = await parseConfig();
-const db = await connectToDatabase();
+const db = await connectToDatabase(config);
 await initChatbox(config, db);
 
 Bun.serve({
