@@ -202,7 +202,11 @@ export class ChatboxHandler {
                 return stockB - stockA;
             }
 
-            return shopBuysItemOnly ? b.price - a.price : a.price - b.price;
+            if (a.price != b.price) {
+                return shopBuysItemOnly ? b.price - a.price : a.price - b.price;
+            } else {
+                return b.stock - a.stock;
+            }
         });
 
         // TODO: args is ugly
