@@ -120,6 +120,11 @@ Bun.serve({
                 return;
             }
 
+            if (msg == "ping") {
+                ws.sendText("pong");
+                return;
+            }
+
             const tryParse = websocketMessageSchema.safeParse(
                 JSON.parse(msg.toString("utf8"))
             );
