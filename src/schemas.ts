@@ -35,6 +35,13 @@ export const websocketMessageSchema = z.object({
             })
             .optional(),
         location: websocketMessageLocationSchema.optional(),
+        txLocation: z.union([z.array(z.number()), arrayifyObjectSchema])
+            .transform((v) => (v.length == 3 ? v : undefined))
+            .optional(),
+        txLocationDim: z.string()
+            .toLowerCase()
+            .transform((v) => Dimension[v as keyof typeof Dimension])
+            .optional(),
         otherLocations: z
             .union([
                 z.array(websocketMessageLocationSchema),

@@ -269,6 +269,8 @@ export class ChatboxHandler {
 
         // TODO: limit length of desc
         // sorry
+        const txLocation = (shop.txLocationX && shop.txLocationY && shop.txLocationZ) ? `${shop.txLocationX} ${shop.txLocationY} ${shop.txLocationZ}` : "null";
+        const txDimension = shop.txLocationDim != undefined ? shop.txLocationDim : "null";
         const mainLocationPos = mainLocation
             ? mainLocation.x && mainLocation.y && mainLocation.z
                 ? `${mainLocation.x} ${mainLocation.y} ${mainLocation.z}`
@@ -289,6 +291,8 @@ export class ChatboxHandler {
             ["mainLocationDim", mainLocationDim],
             ["mainLocationDesc", mainLocationDesc],
             ["fmainLocation", formatLocation(mainLocation)],
+            ["txLocationPos", txLocation],
+            ["txLocationDim", txDimension],
             ["softwareName", shop.softwareName],
             ["softwareVersion", shop.softwareVersion],
             ["lastSeen", shop.lastSeen.toISOString()],

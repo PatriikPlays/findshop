@@ -105,6 +105,10 @@ export class DatabaseManager {
                         )
                     ),
                 },
+                txLocationX: shopsyncPacket.info.txLocation?.[0],
+                txLocationY: shopsyncPacket.info.txLocation?.[1],
+                txLocationZ: shopsyncPacket.info.txLocation?.[2],
+                txLocationDim: shopsyncPacket.info.txLocationDim,
                 items: {
                     // @ts-ignore
                     create: (shopsyncPacket.items ?? []).map((item: any) => ({
@@ -175,6 +179,10 @@ export class DatabaseManager {
                         )
                     ),
                 },
+                txLocationX: shopsyncPacket.info.txLocation?.[0],
+                txLocationY: shopsyncPacket.info.txLocation?.[1],
+                txLocationZ: shopsyncPacket.info.txLocation?.[2],
+                txLocationDim: shopsyncPacket.info.txLocationDim,
                 items: {
                     deleteMany: {},
                     // @ts-ignore

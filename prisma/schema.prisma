@@ -23,6 +23,10 @@ model Shop {
     softwareName    String?
     softwareVersion String?
     lastSeen        DateTime   @default(now())
+    txLocationX     Int?
+    txLocationY     Int?
+    txLocationZ     Int?
+    txLocationDim   Int?
     locations       Location[]
     items           Item[]
 }
