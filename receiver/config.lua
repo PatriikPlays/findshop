@@ -1,3 +1,4 @@
+-- WARNING: no validation is done on config
 return { -- example config:
   modems = {
     {name = "modem_1095", pos = {-199, 91, 58}},

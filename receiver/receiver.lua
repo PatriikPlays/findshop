@@ -1,6 +1,18 @@
 local config = require("config")
 local findSourcePos = require("findSourcePos")
 
+local function printf(...)
+  print(string.format("%s: %s", os.date("!%Y-%m-%dT%H:%M:%SZ"), string.format(...)))
+end
+
+local function printErrorf(...)
+  print(string.format("%s: %s", os.date("!%Y-%m-%dT%H:%M:%SZ"), string.format(...)))
+end
+
+local function errorf(...)
+  error(string.format("%s: %s", os.date("!%Y-%m-%dT%H:%M:%SZ"), string.format(...)))
+end
+
 for i,v in ipairs(config.modems) do
   peripheral.call(v.name, "closeAll")
   peripheral.call(v.name, "open", config.shopSyncPort)
@@ -47,7 +59,7 @@ local function receive(outputQueue)
                 if not modemsUsed[v.modem] then
                   modemsUsed[v.modem] = v
                 else
-                  print("KINDA BAD!!, somehow a message was received on the same modem twice, someone mightve sent the same message twice, this could be because someone transmitted the same message twice in a single tick, trying to handle this")
+                  printErrorf("KINDA BAD!!, somehow a message was received on the same modem twice, someone mightve sent the same message twice, this could be because someone transmitted the same message twice in a single tick, trying to handle this")
                 end
               end
 
@@ -78,7 +90,7 @@ local function receive(outputQueue)
   end, function()
     while true do
       for k,v in pairs(msgBuffer) do
-        print("BAD!!, message not received on all modems in 1 tick", v)
+        printErrorf("BAD!!, message not received on all modems in 1 tick")
       end
       msgBuffer = {}
       sleep()
@@ -126,26 +138,45 @@ parallel.waitForAny(function()
       })
 
       if not ws then
-        error(os.date("!%Y-%m-%dT%H:%M:%SZ").." Failed to connect to WS: " .. err)
+        errorf("Failed to connect to WS: %s", tostring(err))
       else
-        print(os.date("!%Y-%m-%dT%H:%M:%SZ").." Connected to WS")
+        printf("Connected to WS")
       end
 
-      while true do
-        local ok, msg = receiveSS()
+      parallel.waitForAny(function()
+        while true do
+          local ok, msg = receiveSS()
 
-        if ok then
-          print(os.date("!%Y-%m-%dT%H:%M:%SZ").." Sending msg")
-          if ws then
-            print(#msg)
-            ws.send(msg)
+          if ok then
+            printf("Sending msg")
+            if ws then
+              printf("msg len: %d", #msg)
+              ws.send(msg)
+            else
+              errorf("WS closed")
+            end
           else
-            error("WS closed")
+            printf("Received bad data from shop")
           end
-        else
-          print("Received bad data from shop")
         end
-      end
+      end, function()
+        while true do
+          ws.send("ping")
+          sleep(2)
+        end
+      end, function()
+        local lastPong = os.epoch("utc")
+        while true do
+          local msg = ws.receive(5)
+          if msg == "pong" then
+            lastPong = os.epoch("utc")
+          end
+
+          if lastPong+8000 < os.epoch("utc") then
+            errorf("WS server stopped replying")
+          end
+        end
+      end)
     end)
 
     if not s then printError(e) end
