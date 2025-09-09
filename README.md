@@ -56,7 +56,7 @@ shops implementing the [ShopSync] standard. Shops might not appear if:
 | Software                                         | Version  | ShopSync Standard (in latest version) | Note                                                |
 | ------------------------------------------------ | -------- | ------------------------------------- | --------------------------------------------------- |
 | [Kristify](https://github.com/Kristify/Kristify) | >=1.3.0  | 1.1                                   | Earlier versions may use an older ShopSync standard |
-| [Radon](https://github.com/Allymonies/Radon)     | >=1.3.30 | 1.1                                   | Most common shop software                           |
+| [Radon](https://github.com/scmcgowen/Radon)     | >=1.3.30 | 1.1                                   | Most common shop software                           |
 
 ## Subcommands
 
