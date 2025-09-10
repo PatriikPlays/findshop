@@ -34,7 +34,7 @@ export function formatLocation({
     txY?: number | null;
     txZ?: number | null;
     txDimension?: number | null;
-}) {
+} = {}) {
     description = description?.trim();
 
     if (urlValidator.safeParse(description).success)
