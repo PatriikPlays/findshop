@@ -37,7 +37,8 @@ type SearchItemsReturnType<T extends boolean> = T extends true
 export class DatabaseManager {
     prisma: PrismaClient;
     config: z.infer<typeof configSchema>;
-
+    private packetProcessingWorker: Promise<void> = Promise.resolve();
+    
     constructor(prisma: PrismaClient, config: z.infer<typeof configSchema>) {
         this.prisma = prisma;
         this.config = config;
@@ -59,7 +60,12 @@ export class DatabaseManager {
         FindShopLogger.logger.info(`Deleted ${deleted.count} old shop(s)`);
     }
 
-    async handlePacket(shopsyncPacket: z.infer<typeof websocketMessageSchema>) {
+    queuePacket(shopsyncPacket: z.infer<typeof websocketMessageSchema>) {
+        this.packetProcessingWorker = this.packetProcessingWorker.then(async () => await this.handlePacket(shopsyncPacket));
+    }
+
+    private async handlePacket(shopsyncPacket: z.infer<typeof websocketMessageSchema>) {
+        FindShopLogger.logger.debug(`handlePacket ${shopsyncPacket.info.computerID}`);
         const shop = await this.prisma.shop.findFirst({
             where: {
                 computerID: shopsyncPacket.info.computerID,
@@ -67,8 +73,8 @@ export class DatabaseManager {
             },
         });
 
-        if (!shop) return this.insertShop(shopsyncPacket);
-        return this.modifyShop(shop.id, shopsyncPacket);
+        if (!shop) return await this.insertShop(shopsyncPacket);
+        return await this.modifyShop(shop.id, shopsyncPacket);
     }
 
     async insertShop(shopsyncPacket: z.infer<typeof websocketMessageSchema>) {

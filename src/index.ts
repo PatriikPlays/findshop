@@ -137,7 +137,7 @@ Bun.serve({
             }
 
             FindShopLogger.logger.debug("Parsed WebSocket message");
-            db.handlePacket(tryParse.data);
+            db.queuePacket(tryParse.data);
         },
     },
     hostname: config.LISTEN_HOSTNAME,
