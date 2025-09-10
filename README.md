@@ -53,10 +53,14 @@ shops implementing the [ShopSync] standard. Shops might not appear if:
 > [!NOTE]
 > If there are others, feel free to submit a PR.
 
-| Software                                         | Version  | ShopSync Standard (in latest version) | Note                                                |
-| ------------------------------------------------ | -------- | ------------------------------------- | --------------------------------------------------- |
-| [Kristify](https://github.com/Kristify/Kristify) | >=1.3.0  | 1.1                                   | Earlier versions may use an older ShopSync standard |
-| [Radon](https://github.com/Allymonies/Radon)     | >=1.3.30 | 1.1                                   | Most common shop software                           |
+| Software                                                       | Version  | ShopSync Standard (in latest version) | Note                                                |
+| -------------------------------------------------------------- | -------- | ------------------------------------- | --------------------------------------------------- |
+| [Kristify](https://github.com/Kristify/Kristify)               | >=1.3.0  | 1.1                                   | Earlier versions may use an older ShopSync standard |
+| [Radon (Katze's Fork)](https://github.com/scmcgowen/Radon)     | >=1.3.30 | 1.1                                   | Most common shop software, Updated to support Kromer|
+| [Radon (Original)](https://github.com/allymonies/radon)        | >=1.3.30 | 1.1                                   | Most common shop software on SwitchCraft 3.         |
+
+> [!NOTE]
+> If you're running the Radon shop on ReconnectedCC, You should probably use Katze's fork, as it is maintained and supports Kromer.
 
 ## Subcommands
 
