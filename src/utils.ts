@@ -19,11 +19,21 @@ export function formatLocation({
     description,
     dimension,
 }: {
-    x?: number;
-    y?: number;
-    z?: number;
-    description?: string;
-    dimension?: string;
+    x?: number | null;
+    y?: number | null;
+    z?: number | null;
+    description?: string | null;
+    dimension?: number | null;
+}, {
+    txX,
+    txY,
+    txZ,
+    txDimension,
+}: {
+    txX?: number | null;
+    txY?: number | null;
+    txZ?: number | null;
+    txDimension?: number | null;
 }) {
     description = description?.trim();
 
@@ -32,10 +42,20 @@ export function formatLocation({
     let output = "";
 
     if (x && y && z) output += `\`${x} ${y} ${z}\``;
+    else if (txX && txY && txZ) output += `tx{\`${txX} ${txY} ${txZ}\`}`;
     if (description && output === "") output += description;
-    else if (description) output += ` (${description}) `;
-    if (dimension && output === "") output += "the " + dimension;
-    else if (dimension) output += `in the ${dimension}`;
+    else if (description) output += ` (${description})`;
+    
+    console.log(dimension, txDimension)
+
+    if (dimension != null) {
+        if (output === "") output += `the \`${Dimension[dimension]}\``;
+        else output += ` in the \`${Dimension[dimension]}\``;
+    } else if (txDimension != null) {
+        if (output === "") output += `tx{the \`${Dimension[txDimension]}\`}`;
+        else output += ` tx{in the \`${Dimension[txDimension]}\`}`;
+    }
+    
     if (output === "") return "Unknown";
 
     return output;

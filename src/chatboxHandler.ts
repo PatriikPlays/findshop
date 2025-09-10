@@ -235,7 +235,7 @@ export class ChatboxHandler {
             output.push(
                 `${shop.name} (id=\`${shop.computerID}${
                     shop.multiShop ? ";" : ""
-                }${shop.multiShop ?? ""}\`) at ${formatLocation(mainLocation)}`
+                }${shop.multiShop ?? ""}\`) at ${formatLocation(mainLocation, {txX: shop.txLocationX, txY: shop.txLocationY, txZ: shop.txLocationZ, txDimension: shop.txLocationDim})}`
             );
         });
 
