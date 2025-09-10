@@ -54,7 +54,7 @@ export function formatLocation({
     } else if (txDimension != null && txDimension != 0) {
         if (output === "") output += `tx{the \`${Dimension[txDimension]}\`}`;
         else output += ` tx{in the \`${Dimension[txDimension]}\`}`;
-    } else {
+    } else if (dimension == null && txDimension == null) {
         output += "dimension unknown"
     }
     
