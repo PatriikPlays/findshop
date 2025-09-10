@@ -48,12 +48,14 @@ export function formatLocation({
     
     console.log(dimension, txDimension)
 
-    if (dimension != null) {
+    if (dimension != null && txDimension != 0) {
         if (output === "") output += `the \`${Dimension[dimension]}\``;
         else output += ` in the \`${Dimension[dimension]}\``;
-    } else if (txDimension != null) {
+    } else if (txDimension != null && txDimension != 0) {
         if (output === "") output += `tx{the \`${Dimension[txDimension]}\`}`;
         else output += ` tx{in the \`${Dimension[txDimension]}\`}`;
+    } else {
+        output += "dimension unknown"
     }
     
     if (output === "") return "Unknown";
