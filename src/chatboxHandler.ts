@@ -174,10 +174,9 @@ export class ChatboxHandler {
                 // @ts-ignore
                 const mainLocation = item.shop.locations.find(loc => loc.main === true) ?? {}
                 
-                const priceStr = `${padDecimals(price, 2)}${currency}`
+                const priceStr = price != 0 ? `${padDecimals(price, 2)}${currency ?? ""}` : `FREE`
 
                 if (!item.stock) {
-                    
                     item.stock = 0;
                 }
 

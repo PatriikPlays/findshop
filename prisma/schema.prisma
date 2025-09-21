@@ -67,7 +67,7 @@ model Item {
 model Price {
     id           String  @id @default(uuid())
     value        Float
-    currency     String
+    currency     String?
     address      String?
     requiredMeta String?
 

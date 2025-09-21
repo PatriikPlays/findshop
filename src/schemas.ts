@@ -57,10 +57,16 @@ export const websocketMessageSchema = z.object({
                         z.array(
                             z.object({
                                 value: z.number(),
-                                currency: z.string().toUpperCase(),
+                                currency: z.string().toUpperCase().optional(),
                                 address: z.string().optional(),
                                 requiredMeta: z.string().optional(),
-                            })
+                            }).refine(
+                                (price) => price.value==0 || price.currency != undefined,
+                                {
+                                    message: "Currency is required when price value is non zero",
+                                    path: ["currency"]
+                                }
+                            )
                         ),
                         arrayifyObjectSchema,
                     ]),
