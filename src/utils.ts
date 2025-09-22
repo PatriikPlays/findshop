@@ -9,9 +9,6 @@ export enum Dimension {
 }
 
 // Formats the location of a shop
-// Prioritises the description, if it is a URL.
-// Otherwise, it formats the coordinates in the format of
-// x y z (description) in the dimension
 export function formatLocation({
     x,
     y,
@@ -46,8 +43,6 @@ export function formatLocation({
     if (description && output === "") output += description;
     else if (description) output += ` (${description})`;
     
-    console.log(dimension, txDimension)
-
     if (dimension != null && txDimension != 0) {
         if (output === "") output += `the \`${Dimension[dimension]}\``;
         else output += ` in the \`${Dimension[dimension]}\``;
@@ -131,4 +126,12 @@ export function padDecimals(num: number, decimals: number): string {
     }
 
     return numStr;
+}
+
+export function stripNonAscii(str: string): string {
+    let ret = str.replace(/[^\x00-\x7F]/g, "");
+
+    if (ret != str) ret += " (stripped non-ascii)";
+
+    return ret;
 }

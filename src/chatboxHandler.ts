@@ -3,7 +3,7 @@ import { z } from "zod";
 import { configSchema } from "./config";
 import { DatabaseManager, Statistics } from "./db";
 import { FindShopLogger } from "./logger";
-import { formatLocation, paginate, sliceArgs, padDecimals } from "./utils";
+import { formatLocation, paginate, sliceArgs, padDecimals, stripNonAscii } from "./utils";
 
 export async function initChatbox(
     config: z.infer<typeof configSchema>,
@@ -183,7 +183,7 @@ export class ChatboxHandler {
                 output.push({
                     price: price,
                     stock: item.stock ?? (item.madeOnDemand ? 2^31-1 : 0),
-                    text: `${priceStr} (${item.stock ?? "-"}) \`${item.name}\` at **${item.shop.name}** (id=\`${item.shop.computerID}${item.shop.multiShop ? ";":""}${item.shop.multiShop ?? ""}\`) (${formatLocation(
+                    text: `${priceStr} (${item.stock ?? "-"}) \`${item.name}\` at **${stripNonAscii(item.shop.name)}** (id=\`${item.shop.computerID}${item.shop.multiShop ? ";":""}${item.shop.multiShop ?? ""}\`) (${formatLocation(
                         mainLocation,
                         {txX: item.shop.txLocationX, txY: item.shop.txLocationY, txZ: item.shop.txLocationZ, txDimension: item.shop.txLocationDim}
                     )})`
