@@ -125,9 +125,17 @@ Bun.serve({
                 return;
             }
 
-            const tryParse = websocketMessageSchema.safeParse(
-                JSON.parse(msg.toString("utf8"))
-            );
+            let parsedJSON;
+            try {
+                parsedJSON = JSON.parse(msg.toString("utf8"));
+            } catch (err) {
+                FindShopLogger.logger.error(
+                    `Failed to parse JSON in websocket message: ${msg}. Error: ${err}`
+                );
+                return;
+            }
+
+            const tryParse = websocketMessageSchema.safeParse(parsedJSON);
 
             if (!tryParse.success) {
                 FindShopLogger.logger.error(
