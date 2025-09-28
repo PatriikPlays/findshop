@@ -19,10 +19,8 @@ export const configSchema = z.object({
                     : ["fsdev"]
             )
     ),
-    RESULTS_PER_PAGE: z.number().default(7),
     GITHUB_LINK: z.string().default("https://github.com/PatriikPlays/findshop"),
-    CHAT_WIDTH: z.number().default(49),
-    SHOP_EXPIRE_DAYS: z.number().positive().default(14), 
+    SHOP_EXPIRE_DAYS: z.coerce.number().positive().default(14),
 });
 
 export async function parseConfig() {
