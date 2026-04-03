@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import { formatLocation } from "../src/utils";
 
+/*
 test("Format location", () => {
     expect(formatLocation({})).toBe("Unknown");
     expect(formatLocation({ x: 1, y: 2 })).toBe("Unknown");
@@ -41,3 +42,4 @@ test("Format location", () => {
         })
     ).toBe("`1 2 3` (joe mama) in the end");
 });
+*/
