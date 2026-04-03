@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { Dimension } from "./utils";
 
-const arrayifyObjectSchema = z
-    .object({})
-    .strict()
+const arrayifyObjectSchema = z.strictObject({})
     .transform(() => []);
 
 export const websocketMessageLocationSchema = z.object({
@@ -26,8 +24,8 @@ export const websocketMessageSchema = z.object({
         name: z.string(),
         description: z.string().optional(),
         owner: z.string().optional(),
-        computerID: z.number().int(),
-        multiShop: z.number().int().optional(),
+        computerID: z.int(),
+        multiShop: z.int().optional(),
         software: z
             .object({
                 name: z.string().optional(),
@@ -63,8 +61,8 @@ export const websocketMessageSchema = z.object({
                             }).refine(
                                 (price) => price.value==0 || price.currency != undefined,
                                 {
-                                    message: "Currency is required when price value is non zero",
-                                    path: ["currency"]
+                                    path: ["currency"],
+                                    error: "Currency is required when price value is non zero"
                                 }
                             )
                         ),
@@ -77,7 +75,7 @@ export const websocketMessageSchema = z.object({
                         description: z.string().optional(),
                     }),
                     dynamicPrice: z.boolean().default(false),
-                    stock: z.number().int().optional(),
+                    stock: z.int().optional(),
                     madeOnDemand: z.boolean().default(false),
                     requiresInteraction: z.boolean().default(false),
                     shopBuysItem: z.boolean().default(false),

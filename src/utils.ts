@@ -1,6 +1,6 @@
 import { z as zod } from "zod";
 
-const urlValidator = zod.string().url();
+const urlValidator = zod.url();
 
 export enum Dimension {
     overworld = 0,

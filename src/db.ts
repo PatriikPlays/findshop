@@ -3,6 +3,7 @@ import { z } from "zod";
 import { FindShopLogger } from "./logger";
 import { websocketMessageSchema } from "./schemas";
 import { configSchema } from "./config";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 interface Statistic<T> {
     codeName: string;
@@ -311,8 +312,15 @@ export class DatabaseManager {
 
 export async function connectToDatabase(config: z.infer<typeof configSchema>) {
     FindShopLogger.logger.debug("Connecting to database...");
+
+    const adapter = new PrismaLibSql({
+        url: process.env.DATABASE_URL!,
+    });
+
     const prisma = new PrismaClient({
         log: ["error", "info", "warn"],
+        //@ts-ignore - we only write the best of code here
+        adapter,
     });
 
     await prisma.$connect();
