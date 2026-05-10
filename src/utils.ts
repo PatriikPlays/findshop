@@ -135,3 +135,10 @@ export function stripNonAscii(str: string): string {
 
     return ret;
 }
+
+export function escapeLike(input: string) {
+    return input
+    .replace(/\\/g, '\\\\')
+    .replace(/%/g, '\\%')
+    .replace(/_/g, '\\_');
+}

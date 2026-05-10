@@ -3,6 +3,7 @@ import { z } from "zod";
 import { FindShopLogger } from "./logger";
 import { websocketMessageSchema } from "./schemas";
 import { configSchema } from "./config";
+import { escapeLike } from "./utils";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 interface Statistic<T> {
@@ -50,15 +51,26 @@ export class DatabaseManager {
     }
 
     async cleanOldShops() {
-        const deleted = await this.prisma.shop.deleteMany({
-            where: {
-                lastSeen: {
-                    lt: new Date(Date.now() - this.config.SHOP_EXPIRE_DAYS * 24 * 60 * 60 * 1000),
-                },
-            },
+        // aaa
+        const cutoff = new Date(Date.now() - this.config.SHOP_EXPIRE_DAYS * 24 * 60 * 60 * 1000);
+
+        const oldShops = await this.prisma.shop.findMany({
+            select: { id: true, lastSeen: true },
         });
 
-        FindShopLogger.logger.info(`Deleted ${deleted.count} old shop(s)`);
+        const toDelete = oldShops
+            .filter(s => new Date(s.lastSeen) < cutoff)
+            .map(s => s.id);
+
+        if (toDelete.length > 0) {
+            let deleted = await this.prisma.shop.deleteMany({
+                where: {
+                    id: { in: toDelete },
+                },
+            });
+
+            FindShopLogger.logger.info(`Deleted ${deleted.count} old shop(s)`);
+        }
     }
 
     queuePacket(shopsyncPacket: z.infer<typeof websocketMessageSchema>) {
@@ -232,23 +244,55 @@ export class DatabaseManager {
         shopMustBuyItem: boolean;
         includeFullShop: T;
     }): Promise<SearchItemsReturnType<T>> {
-        const exactq = [
-            { name: { equals: query } },
-            { displayName: { equals: query } },
-        ];
-        const nonexactq = [
-            { name: { contains: query } },
-            { displayName: { contains: query } },
-        ];
+        if (exact) {
+            return this.prisma.item.findMany({
+                where: {
+                    OR: [
+                        { name: { equals: query } },
+                        { displayName: { equals: query } },
+                    ],
+                    stock: inStock ? { gt: 0 } : undefined,
+                    shopBuysItem: shopMustBuyItem,
+                },
+                include: {
+                    prices: true,
+                    shop: includeFullShop && {
+                        include: {
+                            locations: true,
+                        },
+                    },
+                },
+            });
+        }
+
+
+        const normalizedQuery = escapeLike(query.replace(/[\s_-]/g, ""));
+
+        const rawItems = await this.prisma.$queryRaw<{ id: string }[]>`
+            SELECT id
+            FROM "Item"
+            WHERE
+                REPLACE(REPLACE(REPLACE("name", '_', ''), '-', ''), ' ', '')
+                LIKE ${'%' + normalizedQuery + '%'}
+                COLLATE NOCASE
+                OR
+                REPLACE(REPLACE(REPLACE("displayName", '_', ''), '-', ''), ' ', '')
+                LIKE ${'%' + normalizedQuery + '%'}
+                COLLATE NOCASE
+        `;
+
+        const ids = rawItems.map(i => i.id);
+
+        if (ids.length === 0) return [];
 
         return this.prisma.item.findMany({
             where: {
-                OR: exact ? exactq : nonexactq,
+                id: { in: ids },
                 stock: inStock ? { gt: 0 } : undefined,
                 shopBuysItem: shopMustBuyItem,
             },
             include: {
-                prices: true,
+            prices: true,
                 shop: includeFullShop && {
                     include: {
                         locations: true,
@@ -322,6 +366,10 @@ export async function connectToDatabase(config: z.infer<typeof configSchema>) {
         //@ts-ignore - we only write the best of code here
         adapter,
     });
+
+    /*prisma.$on('query', (e) => {
+        console.log(e.query, e.params);
+    });*/
 
     await prisma.$connect();
     FindShopLogger.logger.debug("Connected to database!");
