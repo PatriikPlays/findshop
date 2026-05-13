@@ -17,7 +17,7 @@ shops implementing the [ShopSync] protocol. Default command aliases are `\fs` or
 
 ### Supported servers
 
-Currently, findshop only runs on [ReconnectedCC](https://reconnected.cc/). The aliases being used are `\fsl` and `\findshoplegacy`, and the HTTP API runs at https://rcc.findshop.patriik.one/api/.
+Currently, findshop only runs on [ReconnectedCC](https://reconnected.cc/). The aliases being used are `\fsl` and `\findshoplegacy`, and the HTTP API runs at https://findshop.patriik.one/api/.
 
 ### Why are shops or items missing?
 
